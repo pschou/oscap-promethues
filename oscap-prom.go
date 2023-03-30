@@ -9,7 +9,6 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/araddon/dateparse"
 	"github.com/pschou/go-sorting/numstr"
 	"github.com/pschou/go-xmltree"
 )
@@ -71,10 +70,12 @@ func parse(file string) {
 	       <oval:schema_version>5.10</oval:schema_version>
 	       <oval:timestamp>2023-03-28T14:36:21</oval:timestamp>
 	*/
-	genTime, err := dateparse.ParseStrict(
-		root.MatchOne(&xmltree.Selector{Label: "generator"}).
-			MatchOne(&xmltree.Selector{Label: "timestamp"}).GetContent())
-	dateVal := fmt.Sprintf("%d", genTime.UnixMilli())
+	/*
+		genTime, err := dateparse.ParseStrict(
+			root.MatchOne(&xmltree.Selector{Label: "generator"}).
+				MatchOne(&xmltree.Selector{Label: "timestamp"}).GetContent())
+		dateVal := fmt.Sprintf("%d", genTime.UnixMilli())
+	*/
 
 	defToElm := make(map[string]ovalDef)
 
@@ -151,7 +152,7 @@ func parse(file string) {
 			case "critical":
 				v = 4
 			}
-			fmt.Printf("node_cesa_scan_results{title=%q,severity=%q,ident=%q} %d %s\n", elm.title, elm.severity, elm.ident, v, dateVal)
+			fmt.Printf("node_cesa_scan_results{title=%q,severity=%q,ident=%q} %d %s\n", elm.title, elm.severity, elm.ident, v)
 		}
 	}
 }
