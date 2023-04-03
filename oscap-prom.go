@@ -140,8 +140,8 @@ func parse(file string) {
 	})
 	for _, id := range ids {
 		elm := defToElm[id]
+		var v int
 		if elm.result {
-			var v int
 			switch strings.ToLower(elm.severity) {
 			case "low":
 				v = 1
@@ -152,7 +152,7 @@ func parse(file string) {
 			case "critical":
 				v = 4
 			}
-			fmt.Printf("node_cesa_scan_results{title=%q,severity=%q,ident=%q} %d %s\n", elm.title, elm.severity, elm.ident, v)
 		}
+		fmt.Printf("node_cesa_scan_results{title=%q,severity=%q,ident=%q} %d %s\n", elm.title, elm.severity, elm.ident, v)
 	}
 }
