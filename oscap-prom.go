@@ -19,7 +19,7 @@ func main() {
 	if len(os.Args) < 2 {
 		os.Exit(0)
 	}
-	if os.Args[1] == "-h" {
+	if os.Args[1] == "-h" || os.Args[1] == "-v" {
 		fmt.Println("Version: " + version)
 		os.Exit(0)
 	}
