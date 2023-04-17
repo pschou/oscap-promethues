@@ -153,6 +153,6 @@ func parse(file string) {
 				v = 4
 			}
 		}
-		fmt.Printf("node_cesa_scan_results{title=%q,severity=%q,ident=%q} %d %s\n", elm.title, elm.severity, elm.ident, v)
+		fmt.Printf("node_cesa_scan_results{title=%q,severity=%q,ident=%q} %d\n", elm.title, elm.severity, elm.ident, v)
 	}
 }
