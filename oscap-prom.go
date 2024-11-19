@@ -9,6 +9,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/araddon/dateparse"
 	"github.com/pschou/go-sorting/numstr"
 	"github.com/pschou/go-xmltree"
 )
@@ -70,12 +71,26 @@ func parse(file string) {
 	       <oval:schema_version>5.10</oval:schema_version>
 	       <oval:timestamp>2023-03-28T14:36:21</oval:timestamp>
 	*/
-	/*
+
+	{
 		genTime, err := dateparse.ParseStrict(
 			root.MatchOne(&xmltree.Selector{Label: "generator"}).
 				MatchOne(&xmltree.Selector{Label: "timestamp"}).GetContent())
-		dateVal := fmt.Sprintf("%d", genTime.UnixMilli())
-	*/
+		if err == nil {
+			dateVal := genTime.UnixMilli()
+			fmt.Printf("node_cesa_scan_time %d\n", dateVal)
+		}
+	}
+	{
+		genTime, err := dateparse.ParseStrict(
+			root.MatchOne(&xmltree.Selector{Label: "oval_definitions"}).
+				MatchOne(&xmltree.Selector{Label: "generator"}).
+				MatchOne(&xmltree.Selector{Label: "timestamp"}).GetContent())
+		if err == nil {
+			dateVal := genTime.UnixMilli()
+			fmt.Printf("node_cesa_oval_time %d\n", dateVal)
+		}
+	}
 
 	defToElm := make(map[string]ovalDef)
 
@@ -153,6 +168,7 @@ func parse(file string) {
 				v = 4
 			}
 		}
+		elm.title = strings.TrimPrefix(elm.title, "Unaffected components for: ")
 		fmt.Printf("node_cesa_scan_results{title=%q,severity=%q,ident=%q} %d\n", elm.title, elm.severity, elm.ident, v)
 	}
 }
